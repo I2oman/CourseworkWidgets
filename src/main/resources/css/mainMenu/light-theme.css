@@ -1,0 +1,70 @@
+.root {
+    /*-fx-background-color: rgba(31, 31, 35, 0);*/
+    -fx-background-color: transparent;
+}
+
+.label {
+    -fx-text-fill: #000000;
+    -fx-fill: #000000;
+}
+
+
+.windowFrame {
+    /*-fx-fill: rgba(31, 31, 35, 1);*/
+    -fx-effect: dropshadow(gaussian, rgb(31, 31, 35), 10, 0, 0, 0);
+}
+
+.windowBackground {
+    -fx-fill: rgb(200, 200, 200);
+    -fx-background-color: rgb(200, 200, 200);
+}
+
+.transpBtn {
+    -fx-background-color: transparent;
+    -fx-text-fill: #000000;
+}
+
+
+.titled-pane > .title {
+    -fx-background-color: rgb(200, 200, 200);
+}
+
+.titled-pane > *.content {
+    -fx-background-color: rgb(200, 200, 200);
+    -fx-text-fill: black;
+    -fx-border-width: 0;
+}
+
+.titled-pane {
+    -fx-text-fill: black;
+}
+
+.tableEnd .title {
+    -fx-background-color: transparent;
+}
+
+
+.slider .thumb {
+    -fx-background-color: #969696;
+}
+
+.slider {
+    -fx-effect: dropshadow(gaussian, #646464, 5, 0, 0, 0);
+}
+
+.slider .track {
+    -fx-background-color: linear-gradient(to right, #646464 100%, #64646433 0%);
+    /*-fx-border-width: 1px;*/
+    /*-fx-border-color: #828282;*/
+}
+
+.slider .fill {
+    -fx-fill: #1F1F23;
+}
+
+
+.settingsBtn {
+    -fx-background-color: rgba(255, 255, 255, 0.5);
+    -fx-background-radius: 5px;
+    -fx-text-fill: black;
+}

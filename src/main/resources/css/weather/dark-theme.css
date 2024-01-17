@@ -1,0 +1,12 @@
+.root {
+    -fx-background-color: transparent;
+}
+
+.centerCircle {
+    -fx-fill: rgb(31, 31, 35);
+}
+
+.text {
+    -fx-fill: rgb(255, 255, 255);
+    -fx-text-fill: rgb(255, 255, 255);
+}

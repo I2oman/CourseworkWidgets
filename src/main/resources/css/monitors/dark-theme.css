@@ -1,0 +1,45 @@
+.chart-plot-background {
+    -fx-background-color: transparent;
+}
+
+.root {
+    -fx-background-color: rgb(31, 31, 35);
+    -fx-background-radius: 5px;
+}
+
+.text {
+    -fx-fill: rgb(255, 255, 255);
+    -fx-text-fill: rgb(255, 255, 255);
+}
+
+
+#cpuChart .chart-series-area-line {
+    -fx-stroke: rgb(0, 140, 255);
+    -fx-stroke-width: 1.5px;
+}
+
+#cpuChart .chart-series-area-fill {
+    -fx-fill: rgba(0, 140, 255, 0.3);
+}
+
+#cpuChart {
+    -fx-border-color: rgb(0, 140, 255);
+    -fx-border-width: 1.5px;
+    -fx-border-style: solid;
+}
+
+
+#memoryChart .chart-series-area-line {
+    -fx-stroke: rgb(255, 0, 255);
+    -fx-stroke-width: 1.5px;
+}
+
+#memoryChart .chart-series-area-fill {
+    -fx-fill: rgba(255, 0, 255, 0.3);
+}
+
+#memoryChart {
+    -fx-border-color: rgb(255, 0, 255);
+    -fx-border-width: 1.5px;
+    -fx-border-style: solid;
+}

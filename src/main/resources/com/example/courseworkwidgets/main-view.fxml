@@ -1,0 +1,600 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Accordion?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Slider?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.SVGPath?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane fx:id="anchorPane" prefHeight="350.0" prefWidth="220.0" styleClass="windowFrame"
+            xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="com.example.courseworkwidgets.MainController">
+    <children>
+        <AnchorPane layoutX="10.0" layoutY="10.0" prefHeight="0.0" prefWidth="0.0">
+            <children>
+                <SVGPath
+                        content="M 200 66 L 0 66 L 0 41 Q 0 33 8 33 L 83 33 C 116 33 116 0 150 0 L 191 0 Q 200 0 200 8 Z"
+                        fill="RED" stroke="BLACK" strokeWidth="0.0" styleClass="windowBackground"/>
+                <Button layoutX="165.0" mnemonicParsing="false" onAction="#closeMainMenuHandler" styleClass="transpBtn"
+                        text="✕" textFill="WHITE">
+                    <font>
+                        <Font size="15.0"/>
+                    </font>
+                </Button>
+                <Button layoutX="128.0" layoutY="-2.0" mnemonicParsing="false" onAction="#minimizeMainMenuHandler"
+                        styleClass="transpBtn" text="—" textFill="WHITE">
+                    <font>
+                        <Font name="System Bold" size="15.0"/>
+                    </font>
+                </Button>
+                <AnchorPane layoutY="33.0" prefHeight="34.0" prefWidth="200.0">
+                    <children>
+                        <Text fill="WHITE" layoutX="8.0" layoutY="25.0" strokeType="OUTSIDE" strokeWidth="0.0"
+                              styleClass="label" text="Win11 Widgets">
+                            <font>
+                                <Font size="19.0"/>
+                            </font>
+                        </Text>
+                        <Button layoutX="166.0" mnemonicParsing="false" onAction="#menuBtn" prefHeight="34.0"
+                                prefWidth="34.0" styleClass="transpBtn">
+                            <font>
+                                <Font size="11.0"/>
+                            </font>
+                            <graphic>
+                                <SVGPath fx:id="menuSVG" content="M 16 16 L 0 16 L 0 0 L 16 0 Z" fill="WHITE"/>
+                            </graphic>
+                        </Button>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="widgetsPane" layoutX="10.0" layoutY="76.0" minHeight="0.0" minWidth="0.0">
+            <children>
+                <Accordion prefWidth="200.0">
+                    <panes>
+                        <TitledPane text="Weather w clock">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                                    <children>
+                                        <GridPane prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints vgrow="SOMETIMES"/>
+                                                <RowConstraints vgrow="SOMETIMES"/>
+                                                <RowConstraints vgrow="SOMETIMES"/>
+                                                <RowConstraints vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Enable">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="weatherCheckBox" mnemonicParsing="false"
+                                                          onAction="#weatherHandler" GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Dark  theme" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="weatherDarkThemeCheckBox" mnemonicParsing="false"
+                                                          onAction="#weatherDarkThemeHandler" selected="true"
+                                                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Opacity" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Slider fx:id="weatherOpacitySlider" max="1.0" min="0.1"
+                                                        prefHeight="14.0" prefWidth="202.0" value="1.0"
+                                                        GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Slider>
+                                                <Label text="Label" GridPane.rowIndex="3">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <TextField fx:id="cityTextField" onKeyTyped="#onCityChange"
+                                                           GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="System Monitor">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                                    <children>
+                                        <GridPane prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" prefHeight="18.0" valignment="CENTER"
+                                                                vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <RadioButton fx:id="vertical" mnemonicParsing="false" selected="true">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="systemMonitorStyleGroup"/>
+                                                    </toggleGroup>
+                                                </RadioButton>
+                                                <Label text="Vertical" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <RadioButton fx:id="horizontal" mnemonicParsing="false"
+                                                             toggleGroup="$systemMonitorStyleGroup"
+                                                             GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </RadioButton>
+                                                <Label text="Horizontal" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                            </children>
+                                        </GridPane>
+                                        <GridPane layoutY="41.0" prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Enable">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="systemMonitorCheckBox" mnemonicParsing="false"
+                                                          onAction="#systemMonitorHandler" GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Dark theme" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="systemMonitorDarkThemeCheckBox" mnemonicParsing="false"
+                                                          onAction="#systemMonitorDarkThemeHandler" selected="true"
+                                                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Opacity" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Slider fx:id="systemMonitorOpacitySlider" max="1.0" min="0.1"
+                                                        value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Slider>
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="CPU Monitor">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                                    <children>
+                                        <GridPane prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" prefHeight="18.0" valignment="CENTER"
+                                                                vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <RadioButton fx:id="cpuSmall" mnemonicParsing="false">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="cpuMonitorStyleGroup"/>
+                                                    </toggleGroup>
+                                                </RadioButton>
+                                                <Label text="Small" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <RadioButton fx:id="cpuBig" mnemonicParsing="false" selected="true"
+                                                             toggleGroup="$cpuMonitorStyleGroup"
+                                                             GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </RadioButton>
+                                                <Label styleClass="text" text="Big" GridPane.columnIndex="1"
+                                                       GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                            </children>
+                                        </GridPane>
+                                        <GridPane layoutY="41.0" prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Enable">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="cpuMonitorCheckBox" mnemonicParsing="false"
+                                                          onAction="#cpuMonitorHandler" GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Dark theme" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="cpuMonitorDarkThemeCheckBox" mnemonicParsing="false"
+                                                          onAction="#cpuMonitorDarkThemeHandler" selected="true"
+                                                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Opacity" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Slider fx:id="cpuMonitorOpacitySlider" max="1.0" min="0.1" value="1.0"
+                                                        GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Slider>
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </TitledPane>
+                        <TitledPane text="Memory Monitor">
+                            <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefWidth="200.0">
+                                    <children>
+                                        <GridPane prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" prefHeight="18.0" valignment="CENTER"
+                                                                vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <RadioButton fx:id="memSmall" mnemonicParsing="false" selected="true">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                    <toggleGroup>
+                                                        <ToggleGroup fx:id="memoryMonitorStyleGroup"/>
+                                                    </toggleGroup>
+                                                </RadioButton>
+                                                <Label text="Small" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <RadioButton fx:id="memBig" mnemonicParsing="false"
+                                                             toggleGroup="$memoryMonitorStyleGroup"
+                                                             GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </RadioButton>
+                                                <Label text="Big" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                            </children>
+                                        </GridPane>
+                                        <GridPane layoutY="41.0" prefWidth="200.0">
+                                            <columnConstraints>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                                   prefWidth="100.0"/>
+                                            </columnConstraints>
+                                            <rowConstraints>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                            </rowConstraints>
+                                            <children>
+                                                <Label text="Enable">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="memoryMonitorCheckBox" mnemonicParsing="false"
+                                                          onAction="#memoryMonitorHandler" GridPane.columnIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Dark theme" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <CheckBox fx:id="memoryMonitorDarkThemeCheckBox" mnemonicParsing="false"
+                                                          onAction="#memoryMonitorDarkThemeHandler" selected="true"
+                                                          GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </CheckBox>
+                                                <Label text="Opacity" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Label>
+                                                <Slider fx:id="memoryMonitorOpacitySlider" max="1.0" min="0.1"
+                                                        value="1.0" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                                    <GridPane.margin>
+                                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                                    </GridPane.margin>
+                                                </Slider>
+                                            </children>
+                                        </GridPane>
+                                    </children>
+                                </AnchorPane>
+                            </content>
+                        </TitledPane>
+                        <TitledPane accessibleRole="LIST_VIEW" collapsible="false" expanded="false"
+                                    styleClass="tableEnd">
+                            <graphic>
+                                <Pane>
+                                    <children>
+                                        <SVGPath
+                                                content="M 200 0 L 0 0 L 0 8 Q 0 16 8 16 L 83 16 C 116 16 116 1 150 1 L 200 1 Z "
+                                                fill="RED" styleClass="windowBackground"/>
+                                        <Label layoutX="4.0" text="Made by R. Hrynchak">
+                                            <font>
+                                                <Font size="10.0"/>
+                                            </font>
+                                        </Label>
+                                    </children>
+                                </Pane>
+                            </graphic>
+                            <padding>
+                                <Insets left="-9.5" right="-9.5" top="-5.0"/>
+                            </padding>
+                        </TitledPane>
+                    </panes>
+                </Accordion>
+            </children>
+        </AnchorPane>
+        <AnchorPane fx:id="menuPane" layoutX="10.0" layoutY="76.0" visible="false">
+            <children>
+                <AnchorPane prefWidth="200.0" styleClass="windowBackground">
+                    <children>
+                        <GridPane prefWidth="200.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints/>
+                                <RowConstraints minHeight="10.0" valignment="CENTER" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="18.0" valignment="CENTER"
+                                                vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <RadioButton fx:id="standard" mnemonicParsing="false" GridPane.rowIndex="1">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="unitsGroup"/>
+                                    </toggleGroup>
+                                </RadioButton>
+                                <Label text="°K m/s" GridPane.rowIndex="2"/>
+                                <RadioButton fx:id="metric" mnemonicParsing="false" selected="true"
+                                             toggleGroup="$unitsGroup" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </RadioButton>
+                                <Label text="°C m/s" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                                <RadioButton fx:id="imperial" mnemonicParsing="false" toggleGroup="$unitsGroup"
+                                             GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </RadioButton>
+                                <Label text="°F mi/h" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                            </children>
+                        </GridPane>
+                        <GridPane layoutY="41.0" prefWidth="200.0">
+                            <columnConstraints>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                                <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0"
+                                                   prefWidth="100.0"/>
+                            </columnConstraints>
+                            <rowConstraints>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                                <RowConstraints minHeight="10.0" vgrow="SOMETIMES"/>
+                            </rowConstraints>
+                            <children>
+                                <Label text="Global Dark Theme">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                    <font>
+                                        <Font size="10.0"/>
+                                    </font>
+                                </Label>
+                                <CheckBox fx:id="globalDarkThemeCheckBox" mnemonicParsing="false"
+                                          onAction="#globalDarkThemeHandler" selected="true" GridPane.columnIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </CheckBox>
+                                <Label text="Global Opacity" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                                <Slider fx:id="globalOpacitySlider" max="1.0" min="0.1" value="1.0"
+                                        GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </Slider>
+                                <Label text="Dark Theme" GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                                <CheckBox fx:id="mainMenuDarkThemeCheckBox" mnemonicParsing="false"
+                                          onAction="#mainMenuDarkThemeHandler" selected="true" GridPane.columnIndex="1"
+                                          GridPane.rowIndex="2">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </CheckBox>
+                                <Label text="Open this menu on startup" textAlignment="CENTER" wrapText="true"
+                                       GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </Label>
+                                <CheckBox fx:id="mainMenuOnStartupCheckBox" mnemonicParsing="false"
+                                          onAction="#mainMenuOnStartupHandler" selected="true" GridPane.columnIndex="1"
+                                          GridPane.rowIndex="3">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </CheckBox>
+                                <Button mnemonicParsing="false" onAction="#generateSettingsHandler" prefHeight="37.0"
+                                        prefWidth="90.0" styleClass="settingsBtn" text="Generate Setttings File"
+                                        textAlignment="CENTER" wrapText="true" GridPane.rowIndex="4">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                    <padding>
+                                        <Insets bottom="1.0" left="1.0" right="1.0" top="1.0"/>
+                                    </padding>
+                                </Button>
+                                <Button mnemonicParsing="false" onAction="#loadSettingsHandler" prefHeight="37.0"
+                                        prefWidth="90.0" styleClass="settingsBtn" text="Load Settings"
+                                        GridPane.columnIndex="1" GridPane.rowIndex="4">
+                                    <GridPane.margin>
+                                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                                    </GridPane.margin>
+                                </Button>
+                            </children>
+                        </GridPane>
+                    </children>
+                </AnchorPane>
+                <AnchorPane layoutY="224.0" prefHeight="16.0" prefWidth="200.0">
+                    <children>
+                        <SVGPath content="M 200 0 L 0 0 L 0 8 Q 0 16 8 16 L 83 16 C 116 16 116 1 150 1 L 200 1 Z "
+                                 fill="RED" styleClass="windowBackground"/>
+                        <Label layoutX="4.0" text="Made by R. Hrynchak">
+                            <font>
+                                <Font size="10.0"/>
+                            </font>
+                        </Label>
+                    </children>
+                </AnchorPane>
+            </children>
+        </AnchorPane>
+    </children>
+</AnchorPane>
