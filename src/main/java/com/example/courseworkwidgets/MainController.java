@@ -84,37 +84,26 @@ public class MainController implements Initializable {
     private Stage weatherPrimaryStage;
     public Stage weatherStage;
     private WeatherController weatherController;
-    private double systemMonitorOffsetX;
-    private double systemMonitorOffsetY;
-    public double systemMonitorX;
-    public double systemMonitorY;
-    private Stage systemMonitorPrimaryStage;
-    public Stage systemMonitorStage;
-    private SystemMonitorController systemMonitorController;
     private SystemMonitor systemMonitor;
-    private double cpuMonitorOffsetX;
-    private double cpuMonitorOffsetY;
-    public double cpuMonitorX;
-    public double cpuMonitorY;
-    private Stage cpuMonitorPrimaryStage;
-    public Stage cpuMonitorStage;
-    private CPUMonitorController CPUMonitorController;
-    private double memoryMonitorOffsetX;
-    private double memoryMonitorOffsetY;
-    public double memoryMonitorX;
-    public double memoryMonitorY;
-    private Stage memoryMonitorPrimaryStage;
-    public Stage memoryMonitorStage;
-    private MemoryMonitorController memoryMonitorController;
+    public MonitorWidget systemMonitorWidget;
+    public MonitorWidget cpuMonitorWidget;
+    public MonitorWidget memoryMonitorWidget;
     private String openMenuSVG = "M 16 12 L 0 12 L 0 14 L 16 14 L 16 6 L 0 6 L 0 8 L 16 8 L 16 0 L 0 0 L 0 2 L 16 2";
     private String closeMenuSVG = "M 16 14 L 6 7 L 16 0 L 16 3 L 10 7 L 16 11 Z";
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Sets a transparent background to the stage
         anchorPane.setBackground(Background.fill(Color.TRANSPARENT));
 
+        systemMonitorWidget = new MonitorWidget();
+        cpuMonitorWidget = new MonitorWidget();
+        memoryMonitorWidget = new MonitorWidget();
+
+        //Sets the closed menu image to the menu button
         menuSVG.setContent(openMenuSVG);
 
+        //Thread to obtain user's city
         Thread requestCity = new Thread(() -> {
             JsonObject jsonObject = GetJsonResponse.get("https://ipinfo.io/json");
             if (jsonObject != null) {
@@ -125,6 +114,7 @@ public class MainController implements Initializable {
         });
         requestCity.start();
 
+        //Handler to change weather units
         unitsGroup.selectedToggleProperty().addListener((observableValue, toggle, newToggle) -> {
             mainApplication.programProperties.savePrefs("unitsGroup", ((RadioButton) newToggle).getId());
             try {
@@ -133,27 +123,33 @@ public class MainController implements Initializable {
             }
         });
 
+        //Handler to change all slider value when the global opacity slider is moved
         globalOpacitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             globalOpacitySlider.lookup(".track").setStyle(format("-fx-background-color: linear-gradient(to right, #646464 %s, #64646433 %s)", newValue.doubleValue(), newValue.doubleValue()));
             setSingleWidgetOpacity(weatherOpacitySlider, weatherStage, newValue);
-            setSingleWidgetOpacity(systemMonitorOpacitySlider, systemMonitorStage, newValue);
-            setSingleWidgetOpacity(cpuMonitorOpacitySlider, cpuMonitorStage, newValue);
-            setSingleWidgetOpacity(memoryMonitorOpacitySlider, memoryMonitorStage, newValue);
+            setSingleWidgetOpacity(systemMonitorOpacitySlider, systemMonitorWidget.getStage(), newValue);
+            setSingleWidgetOpacity(cpuMonitorOpacitySlider, cpuMonitorWidget.getStage(), newValue);
+            setSingleWidgetOpacity(memoryMonitorOpacitySlider, memoryMonitorWidget.getStage(), newValue);
         });
 
+        //Handler to change the weather widget opacity
         weatherOpacitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
             singleWidgetOpacity(weatherOpacitySlider, weatherStage, newValue);
         });
+        //Handler to the system monitor widget opacity
         systemMonitorOpacitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            singleWidgetOpacity(systemMonitorOpacitySlider, systemMonitorStage, newValue);
+            singleWidgetOpacity(systemMonitorOpacitySlider, systemMonitorWidget.getStage(), newValue);
         });
+        //Handler to change the cpu monitor widget opacity
         cpuMonitorOpacitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            singleWidgetOpacity(cpuMonitorOpacitySlider, cpuMonitorStage, newValue);
+            singleWidgetOpacity(cpuMonitorOpacitySlider, cpuMonitorWidget.getStage(), newValue);
         });
+        //Handler to change the memory monitor widget opacity
         memoryMonitorOpacitySlider.valueProperty().addListener((observable, oldValue, newValue) -> {
-            singleWidgetOpacity(memoryMonitorOpacitySlider, memoryMonitorStage, newValue);
+            singleWidgetOpacity(memoryMonitorOpacitySlider, memoryMonitorWidget.getStage(), newValue);
         });
 
+        //Handler to change the style of the system monitor widget style
         systemMonitorStyleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             mainApplication.programProperties.savePrefs("systemMonitorStyleGroup", ((RadioButton) newToggle).getId());
             if (systemMonitorCheckBox.isSelected()) {
@@ -165,6 +161,7 @@ public class MainController implements Initializable {
                 }
             }
         });
+        //Handler to change the style of the cpu monitor widget style
         cpuMonitorStyleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             mainApplication.programProperties.savePrefs("cpuMonitorStyleGroup", ((RadioButton) newToggle).getId());
             if (cpuMonitorCheckBox.isSelected()) {
@@ -176,6 +173,7 @@ public class MainController implements Initializable {
                 }
             }
         });
+        //Handler to change the style of the memory monitor widget style
         memoryMonitorStyleGroup.selectedToggleProperty().addListener((obs, oldToggle, newToggle) -> {
             mainApplication.programProperties.savePrefs("memoryMonitorStyleGroup", ((RadioButton) newToggle).getId());
             if (memoryMonitorCheckBox.isSelected()) {
@@ -188,10 +186,12 @@ public class MainController implements Initializable {
             }
         });
 
+        //Creates a system monitor object
         systemMonitor = new SystemMonitor();
     }
 
     public void init(MainApplication mainApplication) {
+        //Obtain the mainApplication object after loading the main menu
         this.mainApplication = mainApplication;
     }
 
@@ -205,6 +205,7 @@ public class MainController implements Initializable {
     }
 
     public void menuBtn(ActionEvent actionEvent) {
+        //Changes the menu button image when the button is clicked
         if (menuSVG.getContent().equals(openMenuSVG)) {
             menuSVG.setContent(closeMenuSVG);
             widgetsPane.setVisible(false);
@@ -218,11 +219,13 @@ public class MainController implements Initializable {
 
 
     public void weatherHandler(ActionEvent actionEvent) throws IOException {
+        //Handles a click on the weather checkbox in the main menu
         mainApplication.showWeather.setState(weatherCheckBox.isSelected());
         weather(weatherCheckBox.isSelected());
     }
 
     public void weatherDarkThemeHandler(ActionEvent actionEvent) {
+        //Handles a click on the weather dark theme checkbox in the main menu
         mainApplication.confGlobalDarkScheme();
         singleWidgetStyle(weatherDarkThemeCheckBox.isSelected(), weatherStage);
         mainApplication.programProperties.savePrefs("weatherDarkThemeCheckBox", weatherDarkThemeCheckBox.isSelected());
@@ -231,6 +234,7 @@ public class MainController implements Initializable {
     private Timer timer = new Timer();
 
     public void onCityChange(KeyEvent keyEvent) {
+        //Handles input in the city text field in the main menu
         timer.cancel();
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -248,8 +252,12 @@ public class MainController implements Initializable {
     }
 
     public void weather(boolean show) throws IOException {
+        //Saves the state of the weather widget to the program properties (on or off)
         mainApplication.programProperties.savePrefs("weather", show);
         if (show) {
+            //Creates the weather widget stage with a transparent background,
+            // loads it as a utility to run without an icon in the taskbar,
+            // and removes window borders
             weatherPrimaryStage = new Stage();
             weatherPrimaryStage.initStyle(StageStyle.UTILITY);
             weatherPrimaryStage.setOpacity(0);
@@ -267,8 +275,10 @@ public class MainController implements Initializable {
             });
 
 
+            //Loads a stage
             FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("weather-view.fxml"));
             Parent root = fxmlLoader.load();
+            //Sets a handler for mouse movement on the window
             root.setOnMousePressed(event -> {
                 weatherOffsetX = event.getSceneX();
                 weatherOffsetY = event.getSceneY();
@@ -283,7 +293,9 @@ public class MainController implements Initializable {
                 mainApplication.programProperties.savePrefs("weatherX", weatherStage.getX());
                 mainApplication.programProperties.savePrefs("weatherY", weatherStage.getY());
             });
+            //Creates a scene
             Scene scene = new Scene(root, WeatherController.windowCenterX * 2, WeatherController.windowCenterY * 2);
+            //Applies a style to a scene
             String stylePath = "/css/weather/";
             if (weatherDarkThemeCheckBox.isSelected()) {
                 stylePath += "dark-theme.css";
@@ -301,12 +313,14 @@ public class MainController implements Initializable {
 
             weatherController = fxmlLoader.getController();
 
+            //Passes units and city to the weather controller
             String units = ((RadioButton) unitsGroup.getSelectedToggle()).getId();
             weatherController.setCity(cityTextField.getText(), units);
             mainApplication.programProperties.savePrefs("cityTextField", cityTextField.getText());
 
             weatherStage.show();
         } else {
+            //Exits the widget
             weatherController.exitWidget();
             weatherPrimaryStage.close();
             weatherStage.close();
@@ -315,294 +329,128 @@ public class MainController implements Initializable {
 
 
     public void systemMonitorHandler(ActionEvent actionEvent) throws IOException {
+        //Handles a click on the system monitor checkbox in the main menu
         mainApplication.showSystemMonitor.setState(systemMonitorCheckBox.isSelected());
         systemMonitor(systemMonitorCheckBox.isSelected());
     }
 
     public void systemMonitorDarkThemeHandler(ActionEvent actionEvent) {
+        //Handles a click on the system monitor dark theme checkbox in the main menu
         mainApplication.confGlobalDarkScheme();
-        singleWidgetStyle(systemMonitorDarkThemeCheckBox.isSelected(), systemMonitorStage);
+        singleWidgetStyle(systemMonitorDarkThemeCheckBox.isSelected(), systemMonitorWidget.getStage());
         mainApplication.programProperties.savePrefs("systemMonitorDarkThemeCheckBox", systemMonitorDarkThemeCheckBox.isSelected());
     }
 
     public void systemMonitor(boolean show) throws IOException {
+        //Starts the system monitor widget
         mainApplication.programProperties.savePrefs("systemMonitor", show);
         if (show) {
-            systemMonitorPrimaryStage = new Stage();
-            systemMonitorPrimaryStage.initStyle(StageStyle.UTILITY);
-            systemMonitorPrimaryStage.setOpacity(0);
-            systemMonitorPrimaryStage.show();
-
-            systemMonitorStage = new Stage();
-            systemMonitorStage.initStyle(StageStyle.TRANSPARENT);
-            systemMonitorStage.setOpacity(systemMonitorOpacitySlider.getValue());
-            systemMonitorStage.initOwner(systemMonitorPrimaryStage);
-            systemMonitorStage.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    systemMonitorStage.toBack();
-//                    systemMonitorStage.toFront();
-                }
-            });
-
-            String view = ((RadioButton) systemMonitorStyleGroup.getSelectedToggle()).getId();
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(String.format("systemMonitor/%s.fxml", view)));
-            Parent root = fxmlLoader.load();
-            root.setOnMousePressed(event -> {
-                systemMonitorOffsetX = event.getSceneX();
-                systemMonitorOffsetY = event.getSceneY();
-            });
-            root.setOnMouseDragged(event -> {
-                systemMonitorStage.setX(event.getScreenX() - systemMonitorOffsetX);
-                systemMonitorStage.setY(event.getScreenY() - systemMonitorOffsetY);
-            });
-            root.setOnMouseReleased(event -> {
-                systemMonitorX = systemMonitorStage.getX();
-                systemMonitorY = systemMonitorStage.getY();
-                mainApplication.programProperties.savePrefs("systemMonitorX", systemMonitorStage.getX());
-                mainApplication.programProperties.savePrefs("systemMonitorY", systemMonitorStage.getY());
-            });
-            Scene scene = new Scene(root);
-            String stylePath = "/css/monitors/";
-            if (systemMonitorDarkThemeCheckBox.isSelected()) {
-                stylePath += "dark-theme.css";
-            } else {
-                stylePath += "light-theme.css";
-            }
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(stylePath)).toExternalForm());
-            scene.setFill(Color.TRANSPARENT);
-            systemMonitorStage.setTitle("monitors");
-            systemMonitorStage.setScene(scene);
-
-            systemMonitorStage.setX(systemMonitorX);
-            systemMonitorStage.setY(systemMonitorY);
-            systemMonitorStage.setResizable(false);
-
-            systemMonitorController = fxmlLoader.getController();
-            systemMonitorController.start(systemMonitor);
-            systemMonitorStage.show();
+            systemMonitorWidget.start(mainApplication, systemMonitor,
+                    "system", systemMonitorOpacitySlider.getValue(),
+                    ((RadioButton) systemMonitorStyleGroup.getSelectedToggle()).getId(),
+                    systemMonitorDarkThemeCheckBox.isSelected());
         } else {
-            systemMonitorController.exitWidget();
-            systemMonitorPrimaryStage.close();
-            systemMonitorStage.close();
+            systemMonitorWidget.exit();
         }
     }
 
 
     public void cpuMonitorHandler(ActionEvent actionEvent) throws IOException {
+        //Handles a click on the CPU monitor checkbox in the main menu
         mainApplication.showCPUMonitor.setState(cpuMonitorCheckBox.isSelected());
         cpuMonitor(cpuMonitorCheckBox.isSelected());
     }
 
     public void cpuMonitorDarkThemeHandler(ActionEvent actionEvent) {
+        //Handles a click on the CPU monitor dark theme checkbox in the main menu
         mainApplication.confGlobalDarkScheme();
-        singleWidgetStyle(cpuMonitorDarkThemeCheckBox.isSelected(), cpuMonitorStage);
+        singleWidgetStyle(cpuMonitorDarkThemeCheckBox.isSelected(), cpuMonitorWidget.getStage());
         mainApplication.programProperties.savePrefs("cpuMonitorDarkThemeCheckBox", cpuMonitorDarkThemeCheckBox.isSelected());
     }
 
     public void cpuMonitor(boolean show) throws IOException {
+        //Starts the CPU monitor widget
         mainApplication.programProperties.savePrefs("cpuMonitor", show);
         if (show) {
-            cpuMonitorPrimaryStage = new Stage();
-            cpuMonitorPrimaryStage.initStyle(StageStyle.UTILITY);
-            cpuMonitorPrimaryStage.setOpacity(0);
-            cpuMonitorPrimaryStage.show();
-
-            cpuMonitorStage = new Stage();
-            cpuMonitorStage.initStyle(StageStyle.TRANSPARENT);
-            cpuMonitorStage.setOpacity(cpuMonitorOpacitySlider.getValue());
-            cpuMonitorStage.initOwner(cpuMonitorPrimaryStage);
-            cpuMonitorStage.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    cpuMonitorStage.toBack();
-//                    cpuMonitorStage.toFront();
-                }
-            });
-
-            String view = ((RadioButton) cpuMonitorStyleGroup.getSelectedToggle()).getId();
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(String.format("cpuMonitor/%s.fxml", view)));
-            Parent root = fxmlLoader.load();
-            root.setOnMousePressed(event -> {
-                cpuMonitorOffsetX = event.getSceneX();
-                cpuMonitorOffsetY = event.getSceneY();
-            });
-            root.setOnMouseDragged(event -> {
-                cpuMonitorStage.setX(event.getScreenX() - cpuMonitorOffsetX);
-                cpuMonitorStage.setY(event.getScreenY() - cpuMonitorOffsetY);
-            });
-            root.setOnMouseReleased(event -> {
-                cpuMonitorX = cpuMonitorStage.getX();
-                cpuMonitorY = cpuMonitorStage.getY();
-                mainApplication.programProperties.savePrefs("cpuMonitorX", cpuMonitorStage.getX());
-                mainApplication.programProperties.savePrefs("cpuMonitorY", cpuMonitorStage.getY());
-            });
-            Scene scene = new Scene(root);
-            String stylePath = "/css/monitors/";
-            if (cpuMonitorDarkThemeCheckBox.isSelected()) {
-                stylePath += "dark-theme.css";
-            } else {
-                stylePath += "light-theme.css";
-            }
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(stylePath)).toExternalForm());
-            scene.setFill(Color.TRANSPARENT);
-            cpuMonitorStage.setTitle("monitors");
-            cpuMonitorStage.setScene(scene);
-
-            cpuMonitorStage.setX(cpuMonitorX);
-            cpuMonitorStage.setY(cpuMonitorY);
-            cpuMonitorStage.setResizable(false);
-
-            CPUMonitorController = fxmlLoader.getController();
-            CPUMonitorController.start(systemMonitor);
-            cpuMonitorStage.show();
+            cpuMonitorWidget.start(mainApplication, systemMonitor,
+                    "cpu", cpuMonitorOpacitySlider.getValue(),
+                    ((RadioButton) cpuMonitorStyleGroup.getSelectedToggle()).getId(),
+                    cpuMonitorDarkThemeCheckBox.isSelected());
         } else {
-            CPUMonitorController.exitWidget();
-            cpuMonitorPrimaryStage.close();
-            cpuMonitorStage.close();
+            cpuMonitorWidget.exit();
         }
     }
 
 
     public void memoryMonitorHandler(ActionEvent actionEvent) throws IOException {
+        //Handles a click on the memory monitor checkbox in the main menu
         mainApplication.showMemoryMonitor.setState(memoryMonitorCheckBox.isSelected());
         memoryMonitor(memoryMonitorCheckBox.isSelected());
     }
 
     public void memoryMonitorDarkThemeHandler(ActionEvent actionEvent) {
+        //Handles a click on the memory monitor dark theme checkbox in the main menu
         mainApplication.confGlobalDarkScheme();
-        singleWidgetStyle(memoryMonitorDarkThemeCheckBox.isSelected(), memoryMonitorStage);
+        singleWidgetStyle(memoryMonitorDarkThemeCheckBox.isSelected(), memoryMonitorWidget.getStage());
         mainApplication.programProperties.savePrefs("memoryMonitorDarkThemeCheckBox", memoryMonitorDarkThemeCheckBox.isSelected());
     }
 
     public void memoryMonitor(boolean show) throws IOException {
+        //Starts the memory monitor widget
         mainApplication.programProperties.savePrefs("memoryMonitor", show);
         if (show) {
-            memoryMonitorPrimaryStage = new Stage();
-            memoryMonitorPrimaryStage.initStyle(StageStyle.UTILITY);
-            memoryMonitorPrimaryStage.setOpacity(0);
-            memoryMonitorPrimaryStage.show();
-
-            memoryMonitorStage = new Stage();
-            memoryMonitorStage.initStyle(StageStyle.TRANSPARENT);
-            memoryMonitorStage.setOpacity(memoryMonitorOpacitySlider.getValue());
-            memoryMonitorStage.initOwner(memoryMonitorPrimaryStage);
-            memoryMonitorStage.focusedProperty().addListener((observable, oldValue, newValue) -> {
-                if (newValue) {
-                    memoryMonitorStage.toBack();
-//                    memoryMonitorStage.toFront();
-                }
-            });
-
-            String view = ((RadioButton) memoryMonitorStyleGroup.getSelectedToggle()).getId();
-            FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource(String.format("memoryMonitor/%s.fxml", view)));
-            Parent root = fxmlLoader.load();
-            root.setOnMousePressed(event -> {
-                memoryMonitorOffsetX = event.getSceneX();
-                memoryMonitorOffsetY = event.getSceneY();
-            });
-            root.setOnMouseDragged(event -> {
-                memoryMonitorStage.setX(event.getScreenX() - memoryMonitorOffsetX);
-                memoryMonitorStage.setY(event.getScreenY() - memoryMonitorOffsetY);
-            });
-            root.setOnMouseReleased(event -> {
-                memoryMonitorX = memoryMonitorStage.getX();
-                memoryMonitorY = memoryMonitorStage.getY();
-                mainApplication.programProperties.savePrefs("memoryMonitorX", memoryMonitorStage.getX());
-                mainApplication.programProperties.savePrefs("memoryMonitorY", memoryMonitorStage.getY());
-            });
-            Scene scene = new Scene(root);
-            String stylePath = "/css/monitors/";
-            if (memoryMonitorDarkThemeCheckBox.isSelected()) {
-                stylePath += "dark-theme.css";
-            } else {
-                stylePath += "light-theme.css";
-            }
-            scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(stylePath)).toExternalForm());
-            scene.setFill(Color.TRANSPARENT);
-            memoryMonitorStage.setTitle("monitors");
-            memoryMonitorStage.setScene(scene);
-
-            memoryMonitorStage.setX(memoryMonitorX);
-            memoryMonitorStage.setY(memoryMonitorY);
-            memoryMonitorStage.setResizable(false);
-
-            memoryMonitorController = fxmlLoader.getController();
-            memoryMonitorController.start(systemMonitor);
-            memoryMonitorStage.show();
+            memoryMonitorWidget.start(mainApplication, systemMonitor,
+                    "memory", memoryMonitorOpacitySlider.getValue(),
+                    ((RadioButton) memoryMonitorStyleGroup.getSelectedToggle()).getId(),
+                    memoryMonitorDarkThemeCheckBox.isSelected());
         } else {
-            memoryMonitorController.exitWidget();
-            memoryMonitorPrimaryStage.close();
-            memoryMonitorStage.close();
+            memoryMonitorWidget.exit();
         }
     }
 
 
     public void globalDarkThemeHandler(ActionEvent actionEvent) {
+        //Handles a click on the global dark theme checkbox in the main menu
         mainApplication.globalDarkTheme.setState(globalDarkThemeCheckBox.isSelected());
         globalDarkTheme(globalDarkThemeCheckBox.isSelected());
         mainApplication.confGlobalDarkScheme();
     }
 
     public void globalDarkTheme(boolean dark) {
+        //Changes all dark theme checkboxes to the provided value
         mainMenuDarkThemeCheckBox.setSelected(dark);
         weatherDarkThemeCheckBox.setSelected(dark);
         systemMonitorDarkThemeCheckBox.setSelected(dark);
         cpuMonitorDarkThemeCheckBox.setSelected(dark);
         memoryMonitorDarkThemeCheckBox.setSelected(dark);
 
-        mainApplication.programProperties.savePrefs("mainMenuDarkThemeCheckBox", dark);
-        mainApplication.programProperties.savePrefs("weatherDarkThemeCheckBox", dark);
-        mainApplication.programProperties.savePrefs("systemMonitorDarkThemeCheckBox", dark);
-        mainApplication.programProperties.savePrefs("cpuMonitorDarkThemeCheckBox", dark);
-        mainApplication.programProperties.savePrefs("memoryMonitorDarkThemeCheckBox", dark);
-
-        String stylePath = "";
-        if (dark) {
-            stylePath += "dark-theme.css";
-        } else {
-            stylePath += "light-theme.css";
-        }
-        try {
-            mainApplication.primaryStage.getScene().getStylesheets().clear();
-            mainApplication.primaryStage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/mainMenu/" + stylePath)).toExternalForm());
-        } catch (Exception ignored) {
-        }
-        try {
-            weatherStage.getScene().getStylesheets().clear();
-            weatherStage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/weather/" + stylePath)).toExternalForm());
-        } catch (Exception ignored) {
-        }
-        try {
-            systemMonitorStage.getScene().getStylesheets().clear();
-            systemMonitorStage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/monitors/" + stylePath)).toExternalForm());
-        } catch (Exception ignored) {
-        }
-        try {
-            cpuMonitorStage.getScene().getStylesheets().clear();
-            cpuMonitorStage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/monitors/" + stylePath)).toExternalForm());
-        } catch (Exception ignored) {
-        }
-        try {
-            memoryMonitorStage.getScene().getStylesheets().clear();
-            memoryMonitorStage.getScene().getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/monitors/" + stylePath)).toExternalForm());
-        } catch (Exception ignored) {
-        }
+        //Changes the style of all widgets
+        singleWidgetStyle(dark, mainApplication.primaryStage);
+        singleWidgetStyle(dark, weatherStage);
+        singleWidgetStyle(dark, systemMonitorWidget.getStage());
+        singleWidgetStyle(dark, cpuMonitorWidget.getStage());
+        singleWidgetStyle(dark, memoryMonitorWidget.getStage());
     }
 
     public void mainMenuDarkThemeHandler(ActionEvent actionEvent) {
+        //Handles a click on the main menu dark theme checkbox in the main menu
         mainApplication.confGlobalDarkScheme();
         singleWidgetStyle(mainMenuDarkThemeCheckBox.isSelected(), mainApplication.primaryStage);
         mainApplication.programProperties.savePrefs("mainMenuDarkThemeCheckBox", mainMenuDarkThemeCheckBox.isSelected());
     }
 
     public void mainMenuOnStartupHandler(ActionEvent actionEvent) {
+        //Handles a click on the main menu on startup checkbox in the main menu
         mainApplication.programProperties.savePrefs("mainMenuOnStartup", mainMenuOnStartupCheckBox.isSelected());
     }
 
     public void generateSettingsHandler(ActionEvent actionEvent) {
+        //Handles a click on the generate settings button in the main menu
         mainApplication.programProperties.generatePrefsFile();
     }
 
     public void loadSettingsHandler(ActionEvent actionEvent) {
+        //Handles a click on the load settings button in the main menu
         FileChooser fc = new FileChooser();
         fc.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("properties", "*.properties"));
         File selectedFile = fc.showOpenDialog(null);
@@ -616,6 +464,7 @@ public class MainController implements Initializable {
 
 
     public void singleWidgetStyle(boolean dark, Stage stage) {
+        //Changes the style of the passed widget
         try {
             String stylePath = "/css/" + stage.getTitle();
             if (dark) {
@@ -630,11 +479,13 @@ public class MainController implements Initializable {
     }
 
     public void setSingleWidgetOpacity(Slider slider, Stage stage, Number newValue) {
+        //Changes the value of the passed slider and calls a function to change the widget opacity
         slider.setValue((Double) newValue);
         singleWidgetOpacity(slider, stage, newValue);
     }
 
     public void singleWidgetOpacity(Slider slider, Stage stage, Number newValue) {
+        //Changes the opacity of the passed widget
         mainApplication.programProperties.savePrefs(slider.getId(), (Double) newValue);
         try {
             String s = format("-fx-background-color: linear-gradient(to right, #646464 %s, #64646433 %s)", newValue.doubleValue(), newValue.doubleValue());
@@ -645,6 +496,7 @@ public class MainController implements Initializable {
     }
 
     public void exit() {
+        //Closes all widget and stops the system monitor object
         Platform.runLater(() -> {
             try {
                 weather(false);

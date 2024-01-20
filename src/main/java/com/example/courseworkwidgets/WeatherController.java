@@ -54,8 +54,10 @@ public class WeatherController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Makes the stage background transparent for the window
         anchorPane.setBackground(Background.fill(Color.TRANSPARENT));
 
+        //Collects local time
         LocalDateTime now = LocalDateTime.now();
         timeHour = now.getHour();
         timeMinute = now.getMinute();
@@ -73,22 +75,9 @@ public class WeatherController implements Initializable {
     }
 
     public void setCity(String city, String unints) {
+        //Collects and sets city name
         if (unints != null) {
-            this.unints = unints;
-            switch (unints) {
-                case "metric" -> {
-                    tempUnints = "°C";
-                    speedUnints = "m/s";
-                }
-                case "imperial" -> {
-                    tempUnints = "°F";
-                    speedUnints = "mi/h";
-                }
-                default -> {
-                    tempUnints = "°K";
-                    speedUnints = "m/s";
-                }
-            }
+            setUnints(unints);
         }
         boolean accc = getWeather(city);
         if (accc) {
@@ -99,6 +88,7 @@ public class WeatherController implements Initializable {
     }
 
     public void setUnints(String unints) {
+        //Collects and sets temperature and distance units
         this.unints = unints;
         switch (unints) {
             case "metric" -> {
@@ -123,10 +113,13 @@ public class WeatherController implements Initializable {
 
     private boolean getWeather(String city) {
         try {
+            //Creates a link to obtain weather information
             String link = String.format("https://api.openweathermap.org/data/2.5/weather?q=%s&units=%s&appid=%s", city, unints, appid);
 
+            //Obtains weather information as a Gson object
             JsonObject jsonObject = GetJsonResponse.get(link);
 
+            //Separates and sets weather information into labels
             String cityName = jsonObject.get("name").getAsString();
 
             if (!cityName.equalsIgnoreCase(city)) {
@@ -186,6 +179,7 @@ public class WeatherController implements Initializable {
     }
 
     private void createClock() {
+        //Clears the window and recreates the clock
         anchorPane.getChildren().clear();
         int startEngel = 75;
         Circle currentHalfCircle = new Circle(windowCenterX, windowCenterY, smallRadius);
@@ -236,7 +230,6 @@ public class WeatherController implements Initializable {
 
         anchorPane.getChildren().add(otherHalfcircle);
 
-//        Polyline polyline = new Polyline(72, 115, 77, 118, 82, 115, 77, 127);
         int polylineCX = windowCenterX - 25;
         int polylineCY = windowCenterY + 22;
         Polyline polyline = new Polyline(
@@ -263,6 +256,7 @@ public class WeatherController implements Initializable {
     }
 
     private void createClockMarking() {
+        //Creates clock markings
         int startEngel = 90;
         Circle hourCircle = new Circle(windowCenterX, windowCenterY, bigRadius - 10);
         hourCircle.setFill(Color.WHITE);
@@ -293,6 +287,7 @@ public class WeatherController implements Initializable {
     }
 
     public void createArrows() {
+        //Creates clock arrows
         Circle clockStroke = new Circle(windowCenterX, windowCenterY, bigRadius);
         clockStroke.setFill(Color.TRANSPARENT);
         clockStroke.setStroke(Color.BLACK);
@@ -346,6 +341,7 @@ public class WeatherController implements Initializable {
     }
 
     public void startClock() {
+        //Starts the time thread and counts time
         clockThread = new Thread(() -> {
             try {
                 while (!Thread.interrupted()) {
@@ -386,11 +382,8 @@ public class WeatherController implements Initializable {
         clockThread.start();
     }
 
-    public void exitWidget() {
-        clockThread.interrupt();
-    }
-
     public void setTime(int h, int m, int s) {
+        //Calculates the correct angle to move arrows according to the provided time
         double hourEn = 30 * ((h + 9) % 12);
         double minuteEn = 6 * ((m + 45) % 60);
         double secondEn = 6 * ((s + 45) % 60);
@@ -398,5 +391,9 @@ public class WeatherController implements Initializable {
         rotateHour.setAngle(hourEn);
         rotateMinute.setAngle(minuteEn);
         rotateSecond.setAngle(secondEn);
+    }
+
+    public void exitWidget() {
+        clockThread.interrupt();
     }
 }

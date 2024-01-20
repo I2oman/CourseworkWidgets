@@ -22,12 +22,14 @@ public class CPUMonitorController {
         this.systemMonitor = systemMonitor;
         cpuSeries = new XYChart.Series<>();
         Platform.runLater(() -> cpuChart.getData().add(cpuSeries));
+        //Thread for updating the chart every second
         cpuMonitorThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
                     Platform.runLater(() -> {
                         try {
                             cpuSeries.getData().clear();
+                            //Copying obtained series to the local series
                             for (XYChart.Data<Number, Number> data : systemMonitor.getCpuSeries().getData()) {
                                 cpuSeries.getData().add(new XYChart.Data<>(data.getXValue(), data.getYValue()));
                             }
@@ -46,6 +48,7 @@ public class CPUMonitorController {
     }
 
     private void updateCPU(double cpuLoad) {
+        //Updates the label with the CPU load percentage
         if (cpuLoad > cpuLoadAxis.getUpperBound()) {
             Platform.runLater(() -> cpuLoadAxis.setUpperBound(cpuLoad));
         }

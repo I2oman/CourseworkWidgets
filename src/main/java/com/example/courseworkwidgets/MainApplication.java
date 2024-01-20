@@ -40,17 +40,26 @@ public class MainApplication extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        //Makes the stage background transparent and removes window decoration
         stage.initStyle(StageStyle.TRANSPARENT);
 
+        //Prevents the program from stopping if all windows are closed.
         Platform.setImplicitExit(false);
 
+        //Creates a ProgramProperties object
         programProperties = new ProgramProperties();
-//        programProperties.clearPrefs();
-//        System.exit(666);
-//        programProperties.showPrefs();
 
+        //Clears all preferences and exits, if necessary
+        if (false) {
+            programProperties.clearPrefs();
+            programProperties.showPrefs();
+            System.exit(666);
+        }
+
+        //Loads a stage
         FXMLLoader fxmlLoader = new FXMLLoader(MainApplication.class.getResource("main-view.fxml"));
         Parent root = fxmlLoader.load();
+        //Sets a handler for mouse movement on the window
         root.setOnMousePressed(event -> {
             xOffset = event.getSceneX();
             yOffset = event.getSceneY();
@@ -63,40 +72,48 @@ public class MainApplication extends Application {
             programProperties.savePrefs("rootX", stage.getX());
             programProperties.savePrefs("rootY", stage.getY());
         });
+        //Creates a scene
         Scene scene = new Scene(root, 220, 350, Color.TRANSPARENT);
+        //Applies a style to a scene
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/css/mainMenu/dark-theme.css")).toExternalForm());
 
         stage.setTitle("mainMenu");
         stage.setScene(scene);
 
+        //Gets the middle of the screen
         Rectangle2D sc = Screen.getPrimary().getBounds();
         rootX = sc.getWidth() / 2 - scene.getWidth() / 2;
         rootY = sc.getHeight() / 2 - scene.getHeight() / 2;
 
+        //Changes the loading position of the window to the saved position if possible otherwise, loads it in the center
         try {
             rootX = Double.parseDouble(programProperties.loadPrefs("rootX"));
             rootY = Double.parseDouble(programProperties.loadPrefs("rootY"));
         } catch (Exception ignored) {
         }
-
         stage.setX(rootX);
         stage.setY(rootY);
 
+        //Prevents the window from resizing and loads the logo onto the window
         stage.setResizable(false);
         stage.getIcons().add(new Image(getClass().getResource("/images/Logo_16x16.png").openStream()));
 
+        //Prevents the program from stopping when the close button is pressed
         stage.setOnCloseRequest(e -> Platform.runLater(stage::hide));
 
+        //Obtains the "mainController" to operate the main menu window
         mainController = fxmlLoader.getController();
-
         mainController.init(this);
 
+        //Creates a system tray entity if supported
         if (SystemTray.isSupported()) {
             SystemTray tray = SystemTray.getSystemTray();
+            //System tray menu
             PopupMenu popupMenu = new PopupMenu();
-
+            //System tray drop-down menu from the main menu
             Menu widgetsMenu = new Menu("Widgets");
 
+            //Weather widget option in the system tray drop-down menu
             showWeather = new CheckboxMenuItem("Weather");
             showWeather.addItemListener(event -> {
                 Platform.runLater(() -> {
@@ -109,6 +126,7 @@ public class MainApplication extends Application {
                 });
             });
 
+            //CPU Monitor widget option in the system tray drop-down menu
             showCPUMonitor = new CheckboxMenuItem("CPU Monitor");
             showCPUMonitor.addItemListener(event -> {
                 Platform.runLater(() -> {
@@ -121,6 +139,7 @@ public class MainApplication extends Application {
                 });
             });
 
+            //Memory Monitor widget option in the system tray drop-down menu
             showMemoryMonitor = new CheckboxMenuItem("Memory Monitor");
             showMemoryMonitor.addItemListener(event -> {
                 Platform.runLater(() -> {
@@ -132,6 +151,7 @@ public class MainApplication extends Application {
                 });
             });
 
+            //System Monitor widget option in the system tray drop-down menu
             showSystemMonitor = new CheckboxMenuItem("System Monitor");
             showSystemMonitor.addItemListener(e -> {
                 Platform.runLater(() -> {
@@ -144,12 +164,14 @@ public class MainApplication extends Application {
                 });
             });
 
+            //Adds all widget options to the drop-down menu
             widgetsMenu.add(showWeather);
             widgetsMenu.addSeparator();
             widgetsMenu.add(showSystemMonitor);
             widgetsMenu.add(showCPUMonitor);
             widgetsMenu.add(showMemoryMonitor);
 
+            //Global Dark Theme option in the system tray menu
             globalDarkTheme = new CheckboxMenuItem("Global Dark Theme");
             globalDarkTheme.setState(true);
             globalDarkTheme.addItemListener(e -> Platform.runLater(() -> {
@@ -157,6 +179,7 @@ public class MainApplication extends Application {
                 mainController.globalDarkTheme(globalDarkTheme.getState());
             }));
 
+            //Exit option in the system tray menu
             MenuItem closeProgram = new MenuItem("Exit");
             closeProgram.addActionListener(e -> {
                 Platform.runLater(() -> {
@@ -168,6 +191,7 @@ public class MainApplication extends Application {
             });
 
 
+            //Adds the drop-down menu, Global Dark Theme option, separator, and Exit option to the system tray menu
             popupMenu.add(widgetsMenu);
             popupMenu.add(globalDarkTheme);
             popupMenu.addSeparator();
@@ -208,12 +232,15 @@ public class MainApplication extends Application {
             }
         }
 
+        //Makes "stage" a global variable
         primaryStage = stage;
 
+        //Applies program properties to display users settings
         programProperties.applyPrefs(this, mainController, true);
     }
 
     public void confGlobalDarkScheme() {
+        //All dark theme checkboxes
         CheckBox[] allWidgetsDarkSchemeCheckBoxes = {
                 mainController.mainMenuDarkThemeCheckBox,
                 mainController.weatherDarkThemeCheckBox,
@@ -221,6 +248,7 @@ public class MainApplication extends Application {
                 mainController.cpuMonitorDarkThemeCheckBox,
                 mainController.memoryMonitorDarkThemeCheckBox
         };
+        //Counts how many are checked and sets the state to selected, indeterminate, or unselected
         int totalDark = 0;
         for (CheckBox widgetsBox : allWidgetsDarkSchemeCheckBoxes) {
             if (widgetsBox.isSelected()) {

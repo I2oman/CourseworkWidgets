@@ -20,10 +20,12 @@ public class SystemMonitor {
     private int count;
 
     public SystemMonitor() {
+        //Object for collecting system information
         osBean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
         cpuUpperBound = 100;
 
+        //Collects the total amount of memory
         totalMemory = osBean.getTotalMemorySize() / Math.pow(1024, 3);
         totalMemory = Math.round(totalMemory * 10.0) / 10.0;
 
@@ -37,6 +39,7 @@ public class SystemMonitor {
     }
 
     private void startMonitoring() {
+        //Thread for updating the charts every second
         executorService.scheduleAtFixedRate(() -> {
             try {
                 while (!Thread.interrupted()) {
@@ -49,6 +52,7 @@ public class SystemMonitor {
                     memorySeries.getData().add(new XYChart.Data<>(count, memoryLoad));
                     rescaleTimeLine();
 
+                    //Updates the series' highest value every 10 seconds
                     if (count % 10 == 0 && count != 0) {
                         double highestCPU = -1;
                         for (XYChart.Data<Number, Number> data : cpuSeries.getData()) {
@@ -82,6 +86,9 @@ public class SystemMonitor {
     }
 
     private void rescaleTimeLine() {
+        //When the number of entries in CPU or memory charts exceeds 60,
+        // the first element is removed, and the remaining elements are
+        // reindexed to maintain the sequence starting from 0.
         if (count >= 60) {
             cpuSeries.getData().removeFirst();
             memorySeries.getData().removeFirst();
@@ -123,6 +130,7 @@ public class SystemMonitor {
 
     @Override
     public String toString() {
+        //Returns a string value containing all the variable names and their corresponding values of this class
         return "SystemMonitor{" +
                 "\n\tcount=" + count +
                 "\n\ttotalMemory=" + totalMemory +

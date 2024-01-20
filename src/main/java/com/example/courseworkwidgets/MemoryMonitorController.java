@@ -25,12 +25,14 @@ public class MemoryMonitorController {
             memoryChart.getData().add(memorySeries);
             memoryLoadAxis.setUpperBound(systemMonitor.getTotalMemory());
         });
+        //Thread for updating the chart every second
         memoryMonitorThread = new Thread(() -> {
             while (!Thread.interrupted()) {
                 try {
                     Platform.runLater(() -> {
                         try {
                             memorySeries.getData().clear();
+                            //Copying obtained series to the local series
                             for (XYChart.Data<Number, Number> data : systemMonitor.getMemorySeries().getData()) {
                                 memorySeries.getData().add(new XYChart.Data<>(data.getXValue(), data.getYValue()));
                             }
@@ -49,6 +51,7 @@ public class MemoryMonitorController {
     }
 
     private void updateMemory(double memotyload) {
+        //Changes the label to the current memory load in gigabytes along with the percentage value
         Platform.runLater(() -> {
             double memUsedPr = (double) Math.round((memotyload * 100 / systemMonitor.getTotalMemory()) * 10) / 10;
             memoryLable.setText(memotyload + "/" + systemMonitor.getTotalMemory() + " GB (" + memUsedPr + "%)");
