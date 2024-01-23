@@ -583,7 +583,7 @@
                         </GridPane>
                     </children>
                 </AnchorPane>
-                <AnchorPane layoutY="224.0" prefHeight="16.0" prefWidth="200.0">
+                <AnchorPane layoutY="222.0" prefHeight="16.0" prefWidth="200.0">
                     <children>
                         <SVGPath content="M 200 0 L 0 0 L 0 8 Q 0 16 8 16 L 83 16 C 116 16 116 1 150 1 L 200 1 Z "
                                  fill="RED" styleClass="windowBackground"/>
