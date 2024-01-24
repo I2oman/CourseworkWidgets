@@ -424,6 +424,12 @@ public class MainController implements Initializable {
         cpuMonitorDarkThemeCheckBox.setSelected(dark);
         memoryMonitorDarkThemeCheckBox.setSelected(dark);
 
+        mainApplication.programProperties.savePrefs("mainMenuDarkThemeCheckBox", dark);
+        mainApplication.programProperties.savePrefs("weatherDarkThemeCheckBox", dark);
+        mainApplication.programProperties.savePrefs("systemMonitorDarkThemeCheckBox", dark);
+        mainApplication.programProperties.savePrefs("cpuMonitorDarkThemeCheckBox", dark);
+        mainApplication.programProperties.savePrefs("memoryMonitorDarkThemeCheckBox", dark);
+
         //Changes the style of all widgets
         singleWidgetStyle(dark, mainApplication.primaryStage);
         singleWidgetStyle(dark, weatherStage);
